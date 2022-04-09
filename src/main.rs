@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 fn main() {
     // _say_hello();
     // _print_types();
@@ -10,6 +12,12 @@ fn main() {
     // _test_conditions();
     // _test_loops();
     // _print_match();
+    // _print_struct();
+    // _print_enum();
+    // _print_vector();
+    // _print_hashmap();
+    // _print_options();
+    // _print_results();
 }
 
 fn _say_hello() {
@@ -138,4 +146,161 @@ fn _print_match() {
         3..=4 => println!("3, 4"), // this is how you include 4
         _ => println!("No matching value found, printing default."),
     }
+}
+
+struct _Bird {
+    _name: String,
+    _attack: u64,
+}
+
+impl _Bird {
+    fn _print_name(&self) {
+        println!("{}", self._name)
+    }
+}
+
+fn _print_struct() {
+    let name = String::from("Bird");
+    let bird = _Bird {
+        _name: name,
+        _attack: 5,
+    };
+
+    bird._print_name();
+    println!("{} {}", bird.can_fly(), bird.is_animal())
+}
+
+// trait = interface
+trait Animal {
+    fn can_fly(&self) -> bool;
+    fn is_animal(&self) -> bool {
+        true
+    }
+}
+
+impl Animal for _Bird {
+    fn can_fly(&self) -> bool {
+        true
+    }
+    fn is_animal(&self) -> bool {
+        false
+    }
+}
+
+#[derive(Debug)]
+enum MyEnum {
+    _A,
+    _B(i32),
+    _C { x: i32, y: i32 },
+}
+
+fn _print_enum() {
+    let a: MyEnum = MyEnum::_A;
+    let b: MyEnum = MyEnum::_B(5);
+    let c: MyEnum = MyEnum::_C { x: 10, y: 20 };
+
+    println!("{:?}", a);
+    println!("{:?}", b);
+    println!("{:?}", c);
+
+    if let MyEnum::_B(val) = b {
+        println!("{}", val);
+    }
+
+    if let MyEnum::_C { x, y } = c {
+        println!("{} {}", x, y);
+    }
+}
+
+fn _print_vector() {
+    // Vector's size can be dynamically altered
+    let mut vec: Vec<i64> = vec![1, 2, 3, 4, 5];
+
+    vec.len();
+    vec[0];
+    vec.push(6);
+    vec.remove(0);
+    println!("{:?}", vec);
+}
+
+fn _print_hashmap() {
+    let mut map = HashMap::new();
+
+    map.insert(0, "Hi");
+    map.insert(1, "Hi again");
+    println!("{:?}", map);
+
+    // map.get returns an Option: the fields are Some and Null (basically success and failiure)
+    match map.get(&0) {
+        Some(value) => println!("{}", value),
+        _ => println!("Doesn't exist in the map"),
+    }
+
+    match map.get(&2) {
+        Some(value) => println!("{}", value),
+        _ => println!("Doesn't exist in the map"),
+    }
+
+    map.remove(&0);
+    println!("{:?}", map);
+}
+
+// An Option is an enum that has two types: None (failiure, throws an exception)
+// or Some(value), a tuple struct that wraps a value with type T
+fn _divide_options(dividend: i32, divisor: i32) -> Option<i32> {
+    if dividend % divisor != 0 {
+        None
+    } else {
+        Some(dividend / divisor)
+    }
+}
+
+fn _print_options() {
+    let divide1: Option<i32> = _divide_options(4, 2);
+    let _divide2: Option<i32> = _divide_options(2, 3);
+
+    // Unwrapping a "Some" variant will extract the value wrapped
+    println!("{:?} unwraps to {}", divide1, divide1.unwrap());
+
+    // Unwrapping a "None" variant will throw an exception, called "panic"
+    //println!("{:?} unwraps to {}", _divide2, _divide2.unwrap());
+}
+
+#[derive(Debug)]
+enum MyError {
+    _Error1,
+}
+
+// A Result returns an Err (enum with an error code) ok an Ok(value) (wrapper with a value)
+fn _divide_results(dividend: i32, divisor: i32) -> Result<i32, MyError> {
+    if dividend % divisor != 0 {
+        Err(MyError::_Error1)
+    } else {
+        Ok(dividend / divisor)
+    }
+}
+
+fn _print_results() {
+    let _divide = _divide_results(4, 2);
+
+    //We can use a match but it might get really nested
+    match _divide {
+        Ok(v) => println!("{}", v),
+        Err(v) => println!("{:?}", v),
+    }
+
+    // We can also use an if statement
+    // if _divide.is_ok() {
+    //     println!("{}", _divide.unwrap());
+    // }
+
+    // Or we could just unwrap it
+    // println!("{}", _divide.unwrap());
+
+    // This one returns 100 instead of Error
+    // println!("{}", _divide.unwrap_or(100));
+
+    // How to expect/ignore an error and log it
+    // let res = _divide.expect("We crashed.");
+    // println!("{}", res);
 }

@@ -14,6 +14,13 @@
 10. For Loops
 11. While Loops
 12. Match Statements (switch statements)
+13. Creating Structs (Classes)
+14. Traits (Interfaces)
+15. Enums
+16. Vectors (dynamic arrays)
+17. Hash Maps
+18. Options
+19. Results
 
 ## Setup
 
